@@ -29,14 +29,20 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/users', function () {
         $attributres = Request::validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
+            'name' => 'required|unique:users,name',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8|max:16|regex:/[a-zA-Z]/',
+            // 'password' => 'required|min:8|max:16|regex:/[a-zA-Z]/|regex:/[0-9]/|regex:/[@$!%*#?&]/',
         ]);
+
 
         User::create($attributres);
 
-        return redirect('/users');
+        return redirect('/users')->with([
+            'status' => true,
+            'message' => 'User created successfully',
+            'user' => $attributres,
+        ]);
     });
 
     Route::get('/', function () {

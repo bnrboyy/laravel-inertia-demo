@@ -52,11 +52,17 @@ let form = useForm({
   password: "",
 });
 
-
 let processing = ref(false);
 
 const submit = () => {
-    form.post("/users", form);
+  form.post("/users", {
+    onSuccess: (res) => {
+      console.log(res);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
 };
 
 // let form = reactive({
